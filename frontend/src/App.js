@@ -68,7 +68,7 @@ function App() {
       </div>
       <RemedyInput onSubmit={handleRemedyRequest} loading={loading} />
       <div className="herba-disclaimer">
-        <b>Disclaimer:</b> The information provided by Herba - your personal health assistant is for general informational purposes only, and does not constitute medical advice. It is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read or heard from this AI. If you think you may have a medical emergency, call your doctor or emergency services immediately.
+        <b>Disclaimer:</b> Disclaimer: Herba is an AI health assistant for informational purposes only and does not provide medical advice; always consult a qualified healthcare professional for medical concerns.
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ function App() {
       { from: "user", text: symptoms, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) },
     ]);
     try {
-      const res = await fetch("http://localhost:5000/api/remedy", {
+      const res = await fetch("https://herba-your-personal-health-assistant.onrender.com", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ symptoms }),

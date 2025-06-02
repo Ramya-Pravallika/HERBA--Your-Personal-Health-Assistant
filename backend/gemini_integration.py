@@ -1,7 +1,7 @@
 import os
 import requests
 
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=GEMINI_API_KEY"
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 def generate_remedy(prompt):
@@ -16,11 +16,13 @@ def generate_remedy(prompt):
         }
     }
     response = requests.post(GEMINI_API_URL, headers=headers, params=params, json=body)
+    print("Gemini response status:", response.status_code)
+    print("Gemini response body:", response.text)
     response.raise_for_status()
     content = response.json()
-    # parse the Gemini response for remedy, images, links, instructions
     try:
         resp_text = content['candidates'][0]['content']['parts'][0]['text']
-    except Exception:
+    except Exception as e:
+        print("Parsing error:", e)
         resp_text = "Sorry, I could not generate a remedy at this time."
     return resp_text

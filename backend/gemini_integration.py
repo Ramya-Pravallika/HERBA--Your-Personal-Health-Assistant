@@ -7,59 +7,63 @@ OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 def generate_remedy_with_gemini(prompt):
-    headers = {"Content-Type": "application/json"}
-    params = {"key": GEMINI_API_KEY}
-    body = {
-        "contents": [{"parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "stopSequences": [],
-            "temperature": 0.7,
-            "maxOutputTokens": 1024
-        }
-    }
-    response = requests.post(GEMINI_API_URL, headers=headers, params=params, json=body)
-    response.raise_for_status()
-    content = response.json()
     try:
+        if not GEMINI_API_KEY:
+            print("Gemini API key is missing!")
+            return None
+        headers = {"Content-Type": "application/json"}
+        params = {"key": GEMINI_API_KEY}
+        body = {
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {
+                "stopSequences": [],
+                "temperature": 0.7,
+                "maxOutputTokens": 1024
+            }
+        }
+        response = requests.post(GEMINI_API_URL, headers=headers, params=params, json=body)
+        print("Gemini API response status:", response.status_code)
+        print("Gemini API response body:", response.text)
+        response.raise_for_status()
+        content = response.json()
         return content['candidates'][0]['content']['parts'][0]['text']
-    except Exception:
+    except Exception as e:
+        print("Gemini error:", str(e))
         return None
 
 def generate_remedy_with_gpt(prompt):
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {OPENAI_API_KEY}"
-    }
-    data = {
-        "model": "gpt-3.5-turbo",
-        "messages": [
-            {"role": "system", "content": "You are an AI health assistant. Provide clear, friendly, sectioned herbal home remedies for the given symptoms. Only suggest general, safe advice."},
-            {"role": "user", "content": prompt}
-        ],
-        "max_tokens": 1024,
-        "temperature": 0.7
-    }
-    response = requests.post(OPENAI_API_URL, headers=headers, json=data)
-    response.raise_for_status()
-    content = response.json()
     try:
+        if not OPENAI_API_KEY:
+            print("OpenAI API key is missing!")
+            return None
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {OPENAI_API_KEY}"
+        }
+        data = {
+            "model": "gpt-3.5-turbo",
+            "messages": [
+                {"role": "system", "content": "You are an AI health assistant. Provide clear, friendly, sectioned herbal home remedies for the given symptoms. Only suggest general, safe advice."},
+                {"role": "user", "content": prompt}
+            ],
+            "max_tokens": 512,
+            "temperature": 0.7
+        }
+        response = requests.post(OPENAI_API_URL, headers=headers, json=data)
+        print("GPT API response status:", response.status_code)
+        print("GPT API response body:", response.text)
+        response.raise_for_status()
+        content = response.json()
         return content['choices'][0]['message']['content']
-    except Exception:
+    except Exception as e:
+        print("GPT error:", str(e))
         return None
 
 def generate_remedy(prompt):
-    # Try Gemini first
-    remedy = None
-    try:
-        remedy = generate_remedy_with_gemini(prompt)
-    except Exception as err:
-        print("Gemini API error:", err)
-    # Fallback to GPT if Gemini fails or returns None
-    if not remedy:
-        try:
-            remedy = generate_remedy_with_gpt(prompt)
-        except Exception as err:
-            print("GPT API error:", err)
-    if not remedy:
-        remedy = "Sorry, I could not generate a remedy at this time."
-    return remedy
+    remedy = generate_remedy_with_gemini(prompt)
+    if remedy:
+        return remedy
+    remedy = generate_remedy_with_gpt(prompt)
+    if remedy:
+        return remedy
+    return "Sorry, I could not generate a remedy at this time."

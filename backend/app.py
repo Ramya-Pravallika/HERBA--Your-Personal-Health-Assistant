@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
 from gemini_integration import generate_remedy
 
 app = Flask(__name__)

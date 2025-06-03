@@ -18,16 +18,12 @@ def generate_remedy_with_gemini(prompt):
         }
     }
     response = requests.post(GEMINI_API_URL, headers=headers, params=params, json=body)
-    print("Gemini response status:", response.status_code)
-    print("Gemini response body:", response.text)
     response.raise_for_status()
     content = response.json()
     try:
-        resp_text = content['candidates'][0]['content']['parts'][0]['text']
-    except Exception as e:
-        print("Gemini parsing error:", e)
-        resp_text = None
-    return resp_text
+        return content['candidates'][0]['content']['parts'][0]['text']
+    except Exception:
+        return None
 
 def generate_remedy_with_gpt(prompt):
     headers = {
@@ -44,16 +40,12 @@ def generate_remedy_with_gpt(prompt):
         "temperature": 0.7
     }
     response = requests.post(OPENAI_API_URL, headers=headers, json=data)
-    print("GPT response status:", response.status_code)
-    print("GPT response body:", response.text)
     response.raise_for_status()
     content = response.json()
     try:
-        resp_text = content['choices'][0]['message']['content']
-    except Exception as e:
-        print("GPT parsing error:", e)
-        resp_text = None
-    return resp_text
+        return content['choices'][0]['message']['content']
+    except Exception:
+        return None
 
 def generate_remedy(prompt):
     # Try Gemini first

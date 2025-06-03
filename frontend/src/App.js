@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./index.css";
 
 function App() {
   const [input, setInput] = useState("");
@@ -27,23 +28,23 @@ function App() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "auto", padding: 20 }}>
-      <h1>Herba - Your Personal Health Assistant</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="container">
+      <h1>🌿 Herba - Your Personal Health Assistant</h1>
+      <form className="chat-form" onSubmit={handleSubmit}>
         <input
+          className="chat-input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type your health concern..."
-          style={{ width: "80%", padding: 10 }}
         />
-        <button type="submit" disabled={loading} style={{ padding: 10 }}>
+        <button className="chat-btn" type="submit" disabled={loading || !input.trim()}>
           {loading ? "Loading..." : "Ask"}
         </button>
       </form>
-      <div style={{ marginTop: 20, minHeight: 60 }}>
+      <div className="chat-response">
         {response && <div>{response}</div>}
       </div>
-      <div style={{ marginTop: 40, color: "#888", fontSize: 12 }}>
+      <div className="disclaimer">
         Disclaimer: Herba is an AI health assistant for informational purposes only and does not provide medical advice; always consult a qualified healthcare professional for medical concerns.
       </div>
     </div>

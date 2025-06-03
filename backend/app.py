@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from gemini_integration import generate_remedy
+from openai_integration import generate_remedy
 
 app = Flask(__name__)
 CORS(app)

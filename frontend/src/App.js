@@ -68,7 +68,7 @@ function App() {
       </div>
       <RemedyInput onSubmit={handleRemedyRequest} loading={loading} />
       <div className="herba-disclaimer">
-        <b>Disclaimer:</b> Disclaimer: Herba is an AI health assistant for informational purposes only and does not provide medical advice; always consult a qualified healthcare professional for medical concerns.
+        <b>Disclaimer:</b> Herba is an AI health assistant for informational purposes only and does not provide medical advice; always consult a qualified healthcare professional for medical concerns.
       </div>
     </div>
   );
